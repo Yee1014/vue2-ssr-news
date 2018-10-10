@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const base = require('./webpack.base.config')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
@@ -17,6 +18,30 @@ const config = merge(base, {
     alias: {
       'create-api': './create-api-client.js'
     }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.styl(us)?$/,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'stylus-loader'
+        ],
+      },
+      {
+        test: /\.(le|c)ss$/,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'less-loader',
+        ],
+      }
+    ]
   },
   optimization: {
     minimizer: [
@@ -49,6 +74,10 @@ const config = merge(base, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.VUE_ENV': '"client"'
+    }),
+    new MiniCssExtractPlugin({
+      filename: isProd ? '[name].[chunkhash].css' : '[name].css',
+      chunkFilename: isProd ?  '[id].[chunkhash].css': '[id].css',
     }),
     new VueSSRClientPlugin()
   ]

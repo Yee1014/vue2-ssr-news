@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const {VueLoaderPlugin} = require('vue-loader')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 const resolve = dir => path.join(__dirname, '../', dir)
@@ -9,7 +8,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const base = {
   mode: isProd ? 'production' : 'development',
-  devtool: isProd ? false : 'cheap-eval-source-map', // 'cheap-module-source-map'
+  devtool: isProd ? false : 'cheap-eval-source-map',
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
@@ -17,6 +16,7 @@ const base = {
   },
   resolve: {
     alias: {
+      'vue$': 'vue/dist/vue.esm.js',
       'public': path.resolve(__dirname, '../public')
     }
   },
@@ -43,26 +43,6 @@ const base = {
           limit: 10000,
           name: '[name].[ext]?[hash]'
         }
-      },
-      {
-        test: /\.styl(us)?$/,
-        use: [
-          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
-          'stylus-loader'
-        ],
-      },
-      {
-        test: /\.(le|c)ss$/,
-        use: [
-          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
-          'less-loader',
-        ],
       }
     ]
   },
@@ -74,16 +54,8 @@ const base = {
 }
 
 function setPlugin() {
-  const base = [
-    new MiniCssExtractPlugin({
-      filename: isProd ? '[name].[chunkhash].css' : '[name].css',
-      chunkFilename: isProd ?  '[id].[chunkhash].css': '[id].css',
-    }),
-    new VueLoaderPlugin()
-  ]
-  const dev = [
-    new FriendlyErrorsPlugin()
-  ]
+  const base = [new VueLoaderPlugin()]
+  const dev = [new FriendlyErrorsPlugin()]
   const prod = []
   return base.concat(isProd ? prod : dev)
 }

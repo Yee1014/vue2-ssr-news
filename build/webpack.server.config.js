@@ -17,6 +17,30 @@ module.exports = merge(base, {
       'create-api': './create-api-server.js'
     }
   },
+  module: {
+    rules: [
+      {
+        test: /\.styl(us)?$/,
+        use: [
+          'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'stylus-loader'
+        ],
+      },
+      {
+        test: /\.(le|c)ss$/,
+        use: [
+          'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'less-loader',
+        ],
+      }
+    ]
+  },
   // https://webpack.js.org/configuration/externals/#externals
   // https://github.com/liady/webpack-node-externals
   externals: nodeExternals({
@@ -25,6 +49,7 @@ module.exports = merge(base, {
   }),
   plugins: [
     new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"server"'
     }),
     new VueSSRServerPlugin()
