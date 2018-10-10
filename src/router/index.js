@@ -20,7 +20,7 @@ export function createRouter() {
     return new Router({
         mode: 'history',
         fallback: false,
-        scrollBehavior: () => ({y: 0}),
+        // scrollBehavior: () => ({y: 0}),
         // routes: [
         //   { path: '/frontend/:page(\\d+)?', component: createListView('frontend') },
         //   { path: '/android/:page(\\d+)?', component: createListView('android') },

@@ -1,15 +1,15 @@
 const path = require('path')
 const webpack = require('webpack')
-const vueConfig = require('./vue-loader.config')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const {VueLoaderPlugin} = require('vue-loader')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
+const resolve = dir => path.join(__dirname, '../', dir)
 const isProd = process.env.NODE_ENV === 'production'
 
-module.exports = {
-  devtool: isProd
-    ? false
-    : '#cheap-module-source-map',
+const base = {
+  mode: isProd ? 'production' : 'development',
+  devtool: isProd ? false : 'cheap-eval-source-map', // 'cheap-module-source-map'
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
@@ -26,12 +26,15 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueConfig
+        include: resolve("src")
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: file => (
+          /node_modules/.test(file) &&
+          !/\.vue\.js/.test(file)
+        )
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -42,31 +45,53 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        use: isProd
-          ? ExtractTextPlugin.extract({
-              use: 'css-loader?minimize',
-              fallback: 'vue-style-loader'
-            })
-          : ['vue-style-loader', 'css-loader']
+        test: /\.styl(us)?$/,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'stylus-loader'
+        ],
+      },
+      {
+        test: /\.(le|c)ss$/,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+          {
+            loader: 'css-loader'
+          },
+          'less-loader',
+        ],
       }
     ]
   },
   performance: {
     maxEntrypointSize: 300000,
-    hints: isProd ? 'warning' : false
+    hints: false
   },
-  plugins: isProd
-    ? [
-        new webpack.optimize.UglifyJsPlugin({
-          compress: { warnings: false }
-        }),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new ExtractTextPlugin({
-          filename: 'common.[chunkhash].css'
-        })
-      ]
-    : [
-        new FriendlyErrorsPlugin()
-      ]
+  plugins: setPlugin()
 }
+
+function setPlugin() {
+  const base = [
+    new MiniCssExtractPlugin({
+      filename: isProd ? '[name].[chunkhash].css' : '[name].css',
+      chunkFilename: isProd ?  '[id].[chunkhash].css': '[id].css',
+    }),
+    new VueLoaderPlugin()
+  ]
+  const dev = [
+    new FriendlyErrorsPlugin()
+  ]
+  const prod = []
+  return base.concat(isProd ? prod : dev)
+}
+
+// 查看打包内容
+if (process.env.analyz_config_report) {
+    const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+    base.plugins.push(new BundleAnalyzerPlugin())
+}
+
+module.exports = base;

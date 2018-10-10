@@ -7,7 +7,7 @@
         </router-link>
         <router-link v-for="category in categories" :to="category.path" :key="category.id">{{category.title}}</router-link>
         <a class="github" href="https://github.com/tiodot/vnews" target="_blank" rel="noopener">
-          Built with Vue.js
+          Built with Vue.js11
         </a>
       </nav>
     </header>

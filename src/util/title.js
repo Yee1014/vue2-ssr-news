@@ -19,12 +19,11 @@ const serverTitleMixin = {
 const clientTitleMixin = {
   mounted () {
     const title = getTitle(this)
+    console.log('clientTitleMixin')
     if (title) {
       document.title = `掘金 | ${title}`
     }
   }
 }
 
-export default process.env.VUE_ENV === 'server'
-  ? serverTitleMixin
-  : clientTitleMixin
+export default process.env.VUE_ENV === "server" ? serverTitleMixin : clientTitleMixin
