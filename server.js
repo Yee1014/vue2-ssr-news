@@ -122,7 +122,6 @@ app.get('/v1/get_entry_by_rank', (req, res) => {
         url: websiteConfig.host + req.url,
         responseType:'stream'
     }).then(response => {
-        // console.log(response);
         response.data.pipe(res);
     }).catch(err => {
         console.error(err);

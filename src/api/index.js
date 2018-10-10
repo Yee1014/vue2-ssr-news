@@ -47,14 +47,6 @@ function fetch(child) {
                 logRequests && console.log(`fetched ${child}.`);
                 resolve(val);
             }, reject).catch(reject);
-            // api.child(child).once('value', snapshot => {
-            //     const val = snapshot.val()
-            //     // mark the timestamp when this item is cached
-            //     if (val) val.__lastUpdated = Date.now()
-            //     cache && cache.set(child, val)
-            //     logRequests && console.log(`fetched ${child}.`)
-            //     resolve(val)
-            // }, reject)
         })
     }
 }
