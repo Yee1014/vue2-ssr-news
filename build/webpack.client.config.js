@@ -9,6 +9,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const Category = require('../src/config/category');
 
 const isProd = process.env.NODE_ENV === 'production'
+const entry = ['./src/entry-client.js']
+// if (!isProd) entry.push('webpack-hot-middleware/client?noInfo=true&reload=true')
 
 const config = merge(base, {
   entry: {
@@ -27,14 +29,14 @@ const config = merge(base, {
           isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
           'css-loader',
           'stylus-loader'
-        ],
+        ]
       }, {
         test: /\.(le|c)ss$/,
         use: [
           isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
           'css-loader',
           'less-loader',
-        ],
+        ]
       }
     ]
   },
@@ -82,9 +84,7 @@ if (process.env.NODE_ENV === 'production') {
     filename: 'service-worker.js',
     minify: false,
     dontCacheBustUrlsMatching: /./,
-    staticFileGlobsIgnorePatterns: [
-      /\.map$/, /\.json$/
-    ],
+    staticFileGlobsIgnorePatterns: [ /\.map$/, /\.json$/ ],
     runtimeCaching: [
       {
         urlPattern: '/',

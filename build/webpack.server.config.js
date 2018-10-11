@@ -23,29 +23,21 @@ module.exports = merge(base, {
         test: /\.styl(us)?$/,
         use: [
           'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
           'stylus-loader'
         ],
-      },
-      {
+      }, {
         test: /\.(le|c)ss$/,
         use: [
           'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
           'less-loader',
         ],
       }
     ]
   },
-  // https://webpack.js.org/configuration/externals/#externals
-  // https://github.com/liady/webpack-node-externals
   externals: nodeExternals({
-    // do not externalize CSS files in case we need to import it from a dep
-    whitelist: [/\.css$/,  /\?vue&type=style/]
+    whitelist: [/\.css$/,  /\?vue&type=style/, /^webpack/]
   }),
   plugins: [
     new webpack.DefinePlugin({

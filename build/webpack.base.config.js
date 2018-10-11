@@ -52,10 +52,6 @@ const base = {
       }
     ]
   },
-  performance: {
-    maxEntrypointSize: 300000,
-    hints: false
-  },
   plugins: setPlugin()
 }
 
