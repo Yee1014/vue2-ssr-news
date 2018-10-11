@@ -1,8 +1,14 @@
 {
   "presets": [
-    ["env", { "modules": false }]
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["ie >= 9"]
+      }
+    }]
   ],
   "plugins": [
-    "syntax-dynamic-import"
+    ["import", { "libraryName": "iview", "libraryDirectory": "src/components" }],
+    "transform-runtime", "syntax-dynamic-import"
   ]
 }

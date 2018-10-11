@@ -1,86 +1,82 @@
 <template>
-    <div class="news-view">
-        <transition :name="transition">
-            <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
-                <transition-group tag="ul" name="item">
-                    <item v-for="item in displayedItems" :key="item.objectId" :item="item">
-                    </item>
-                </transition-group>
-            </div>
-        </transition>
-        <div class="news-list-nav">
-            <a @click="prev" :class="{'disabled': prevDisabled}">&lt; prev</a>
-            <a @click="next">next &gt;</a>
-        </div>
+<div class="news-view">
+  <transition :name="transition">
+    <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
+      <transition-group tag="ul" name="item">
+        <item v-for="item in displayedItems" :key="item.objectId" :item="item">
+        </item>
+      </transition-group>
     </div>
+  </transition>
+  <div class="news-list-nav">
+    <a @click="prev" :class="{'disabled': prevDisabled}">&lt; prev</a>
+    <a @click="next">next &gt;</a>
+  </div>
+</div>
 </template>
 
 <script>
-    import Item from '../components/Item.vue'
+import Item from '../components/Item.vue'
 
-    export default {
-        name: 'item-list',
-
-        components: {
-            Item
-        },
-
-        props: {
-            type: String
-        },
-
-        data() {
-            const currentTypeItems = this.$store.state.lists[this.type];
-            return {
-                transition: 'slide-right',
-                displayedPage: Number(this.$route.params.page) || 1,
-                displayedItems: currentTypeItems.entrylist
-            }
-        },
-        computed: {
-            prevDisabled() {
-                return this.rankIndex.length <= 1;
-            },
-            rankIndex() {
-                return this.$store.state.rankIndex[this.type];
-            }
-        },
-
-        methods: {
-            next(){
-                this.$bar.start();
-                const displayedItemsLength = this.displayedItems.length;
-                const lastDisplayItem = this.displayedItems[displayedItemsLength - 1];
-                const before = lastDisplayItem && lastDisplayItem.rankIndex || undefined;
-                console.log('before...', before);
-                this.$store.dispatch('FETCH_LIST_DATA', {
-                    type: this.type,
-                    index: before,
-                    action: 'next'
-                }).then(() => {
-                    const currentTypeItems = this.$store.state.lists[this.type];
-                    this.transition = 'slide-right';
-                    this.displayedItems = currentTypeItems.entrylist;
-                    this.$bar.finish()
-                });
-            },
-            prev() {
-                this.$bar.start();
-                const rankIndexList = this.rankIndex;
-                const before = rankIndexList[rankIndexList.length - 2] || undefined;
-                this.$store.dispatch('FETCH_LIST_DATA', {
-                    type: this.type,
-                    index: before,
-                    action: 'prev'
-                }).then(() => {
-                    const currentTypeItems = this.$store.state.lists[this.type];
-                    this.transition = 'slide-left';
-                    this.displayedItems = currentTypeItems.entrylist;
-                    this.$bar.finish();
-                });
-            }
-        }
+export default {
+  name: 'item-list',
+  components: {
+    Item
+  },
+  props: {
+    type: String
+  },
+  data() {
+    const currentTypeItems = this.$store.state.lists[this.type];
+    return {
+      transition: 'slide-right',
+      displayedPage: Number(this.$route.params.page) || 1,
+      displayedItems: currentTypeItems.entrylist
     }
+  },
+  computed: {
+    prevDisabled() {
+      return this.rankIndex.length <= 1;
+    },
+    rankIndex() {
+      return this.$store.state.rankIndex[this.type];
+    }
+  },
+  methods: {
+    next() {
+      this.$bar.start();
+      const displayedItemsLength = this.displayedItems.length;
+      const lastDisplayItem = this.displayedItems[displayedItemsLength - 1];
+      const before = lastDisplayItem && lastDisplayItem.rankIndex || undefined;
+      console.log('before...', before);
+      this.$store.dispatch('FETCH_LIST_DATA', {
+        type: this.type,
+        index: before,
+        action: 'next'
+      }).then(() => {
+        const currentTypeItems = this.$store.state.lists[this.type];
+        this.transition = 'slide-right';
+        this.displayedItems = currentTypeItems.entrylist;
+        this.$bar.finish()
+      });
+    },
+    prev() {
+      this.$bar.start();
+      const rankIndexList = this.rankIndex;
+      const before = rankIndexList[rankIndexList.length - 2] || undefined;
+      this.$store.dispatch('FETCH_LIST_DATA', {
+        type: this.type,
+        index: before,
+        action: 'prev'
+      }).then(() => {
+        const currentTypeItems = this.$store.state.lists[this.type];
+        this.transition = 'slide-left';
+        this.displayedItems = currentTypeItems.entrylist;
+        this.$bar.finish();
+      });
+    }
+  }
+}
 </script>
 
 <style lang="stylus">

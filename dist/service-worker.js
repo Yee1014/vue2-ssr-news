@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["/dist/0.a3437e3dec6a84e410d5.css","9706e75df3c8f60475583e6e30c25bf3"],["/dist/1.f9faaf793ca361b755af.css","fd8f9614fdf9c083a5e844e7fb73f467"],["/dist/1.f9faaf793ca361b755af.js","b11584ced8fb57b946e0e71f2bf15325"],["/dist/app.a3437e3dec6a84e410d5.js","eef8c91516c64399872478ba184b690d"],["/dist/manifest.0ac683282b0a0298cbc1.js","84658183b40789dffd1b2388fcf1d431"],["/dist/vendor.1fe141256d2539786abd.js","83af59b9c4f6012d750646077684dfae"]];
+var precacheConfig = [["/dist/js/1.856d5143.js","f3f94a2aa0a86df682d15c4d313eaa55"],["/dist/js/app.d9b49a2e.js","f70c188c4fb57a31fa2a7cdd8ecc3fa2"],["/dist/js/manifest.0bdf86af.js","a24a2ef16d42f087e69278b620e48f2d"],["/dist/js/vendor.5caf9d82.js","1a41f82fe75ab8e47038c19053a85f02"],["/dist/style/1.856d5143.css","fd8f9614fdf9c083a5e844e7fb73f467"],["/dist/style/app.d9b49a2e.css","9706e75df3c8f60475583e6e30c25bf3"]];
 var cacheName = 'sw-precache-v3-vue-hn-' + (self.registration ? self.registration.scope : '');
 
 

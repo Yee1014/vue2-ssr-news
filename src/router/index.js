@@ -20,17 +20,7 @@ export function createRouter() {
     return new Router({
         mode: 'history',
         fallback: false,
-        // scrollBehavior: () => ({y: 0}),
-        // routes: [
-        //   { path: '/frontend/:page(\\d+)?', component: createListView('frontend') },
-        //   { path: '/android/:page(\\d+)?', component: createListView('android') },
-        //   { path: '/article/:page(\\d+)?', component: createListView('article') },
-        //   { path: '/product/:page(\\d+)?', component: createListView('product') },
-        //   // { path: '/job/:page(\\d+)?', component: createListView('job') },
-        //   // { path: '/item/:id(\\d+)', component: ItemView },
-        //   // { path: '/user/:id', component: UserView },
-        //   { path: '/', redirect: '/top' }
-        // ]
+        scrollBehavior: () => ({y: 0}),
         routes: routes
     });
 }

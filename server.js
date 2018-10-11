@@ -80,26 +80,21 @@ app.use('/service-worker.js', serve('./dist/service-worker.js'))
 // 1-second microcache.
 // https://www.nginx.com/blog/benefits-of-microcaching-nginx/
 app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl))
-
 function render(req, res) {
     const s = Date.now()
-
     res.setHeader("Content-Type", "text/html")
     res.setHeader("Server", serverInfo)
-
     const handleError = err => {
         if (err.url) {
             res.redirect(err.url)
         } else if (err.code === 404) {
             res.status(404).send('404 | Page Not Found')
         } else {
-            // Render Error Page or Redirect
             res.status(500).send('500 | Internal Server Error')
             console.error(`error during render : ${req.url}`)
             console.error(err.stack)
         }
     }
-
     const context = {
         title: '掘金', // default title
         url: req.url

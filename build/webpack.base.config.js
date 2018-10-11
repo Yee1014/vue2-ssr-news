@@ -12,7 +12,8 @@ const base = {
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
-    filename: '[name].[chunkhash].js'
+    filename: isProd ? 'js/[name].[chunkhash:8].js' : 'js/[name].js',
+    chunkFilename: isProd ? 'js/[name].[chunkhash:8].js' : 'js/[name].js'
   },
   resolve: {
     alias: {
@@ -27,21 +28,26 @@ const base = {
         test: /\.vue$/,
         loader: 'vue-loader',
         include: resolve("src")
-      },
-      {
+      }, {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: file => (
           /node_modules/.test(file) &&
           !/\.vue\.js/.test(file)
         )
-      },
-      {
+      }, {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: '[name].[ext]?[hash]'
+          name: 'img/[name].[ext]?[hash]'
+        }
+      }, {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'fonts/[name].[ext]?[hash]'
         }
       }
     ]

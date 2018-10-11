@@ -25,19 +25,14 @@ const config = merge(base, {
         test: /\.styl(us)?$/,
         use: [
           isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
           'stylus-loader'
         ],
-      },
-      {
+      }, {
         test: /\.(le|c)ss$/,
         use: [
           isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
           'less-loader',
         ],
       }
@@ -72,13 +67,7 @@ const config = merge(base, {
     }
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.VUE_ENV': '"client"'
-    }),
-    new MiniCssExtractPlugin({
-      filename: isProd ? '[name].[chunkhash].css' : '[name].css',
-      chunkFilename: isProd ?  '[id].[chunkhash].css': '[id].css',
-    }),
+    new webpack.DefinePlugin({ 'process.env.VUE_ENV': '"client"' }),
     new VueSSRClientPlugin()
   ]
 })
@@ -106,6 +95,15 @@ if (process.env.NODE_ENV === 'production') {
       }
     ]
   }))
+}
+
+if (isProd) {
+  config.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: 'style/[name].[chunkhash:8].css',
+      chunkFilename: 'style/[name].[chunkhash:8].css'
+    })
+  )
 }
 
 module.exports = config
